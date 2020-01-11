@@ -4,9 +4,12 @@
 
 import React, { Component } from 'react';
 import {
+  AlertIOS,
   View,
   Text,
+  Image, 
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import Header from './Header';
 import AlbumArt from './AlbumArt';
@@ -18,19 +21,59 @@ import Video from 'react-native-video';
 export default class Player extends Component {
   constructor(props) {
     super(props);
+	this.onLoad = this.onLoad.bind(this);
+	this.onProgress = this.onProgress.bind(this);
+	this.onPlay = this.onPlay.bind(this);
+	this.onPause = this.onPause.bind(this);
 
     this.state = {
-      paused: true,
+      rate: 1, 
+	  paused: true,
       totalLength: 1,
       currentPosition: 0,
       selectedTrack: 0,
       repeatOn: false,
       shuffleOn: false,
-    };
+	  volume: 1,
+	  duration: 0.0,
+	  currentTime: 0.0,
+	  controls: false
+	};
+  }
+
+  onLoad(data) {
+    console.log("On Load Fired (data)!");
+    console.log(this.state.selectedTrack);	
+	console.log(data);	
+	console.log(data.target);
+	console.log("\n");
+	this.setState({duration: data.target});
+  }
+
+  onProgress(data) {
+    console.log("On Progress (data)!");
+	//console.log(data);
+	console.log("\n");
+    this.setState({currentTime: data.currentTime});
+  }
+
+  onPlay(data) {
+    console.log("On Press Play(data)!");
+	//console.log(data);
+	this.setState({paused: false});
+	this.setState({duration: data.duration});
+  }
+
+  onPause(data) {
+    console.log("On Press Pause(data)!");
+	//console.log(data);
+	this.setState({paused: true});
   }
 
   setDuration(data) {
-    // console.log(totalLength);
+    console.log("Set Duration (data):"); 
+	console.log(data);
+	console.log("\n");
     this.setState({totalLength: Math.floor(data.duration)});
   }
 
@@ -49,7 +92,9 @@ export default class Player extends Component {
   }
 
   onBack() {
-    if (this.state.currentPosition < 10 && this.state.selectedTrack > 0) {
+    console.log("On Back:");
+	
+	if (this.state.currentPosition < 10 && this.state.selectedTrack > 0) {
       this.refs.audioElement && this.refs.audioElement.seek(0);
       this.setState({ isChanging: true });
       setTimeout(() => this.setState({
@@ -85,23 +130,58 @@ export default class Player extends Component {
 
   render() {
     const track = this.props.tracks[this.state.selectedTrack];
-    const video = this.state.isChanging ? null : (
-      <Video source={{uri: track.audioUrl}} // Can be a URL or a local file.
-        ref="audioElement"
-        paused={this.state.paused}               // Pauses playback entirely.
-        resizeMode="cover"           // Fill the whole screen at aspect ratio.
-        repeat={true}                // Repeat forever.
-        onLoadStart={this.loadStart} // Callback when video starts to load
-        onLoad={this.setDuration.bind(this)}    // Callback when video loads
-        onProgress={this.setTime.bind(this)}    // Callback every ~250ms with currentTime
-        onEnd={this.onEnd}           // Callback when playback finishes
-        onError={this.videoError}    // Callback when video cannot be loaded
-        style={styles.audioElement} />
-    );
+	console.log("Track Object:");
+	console.log(track.audioUrl);
+	console.log("\n");
+	console.log("State:");
+	console.log(this.state);
+	console.log("\n");
+    //    onLoadStart={this.loadStart} // Callback when video starts to load
+    //    onLoad={this.setDuration.bind(this)}    // Callback when video loads
+    //    onProgress={this.setTime.bind(this)}    // Callback every ~250ms with currentTime
+    //    onEnd={this.onEnd}           // Callback when playback finishes
+	//const video = this.state.isChanging ? null : (
+    //);
+    /* 
+	  	<TouchableOpacity style={styles.fullScreen} onPress={() => {this.setState({paused: !this.    state.paused})}}> 
+       	</TouchableOpacity> 
+	*/
 
-    return (
+    /* 
+	  this.state.paused
+	  this.state.volume
+		eslint-disable
+	*/
+			//onLoad={() => {console.log("ON LOAD!!")}}    // Callback when video loads
+			/*	
+			source={{uri: "https://euums.baseservers.com/abantuaudio/mp4:A%20Comparative%20Study%20of%20the%20Negro%20Problem.mp4/playlist.m3u8", type: "m3u8"}}
+			muted={false}	
+			paused={false}   // Pauses playback entirely.
+			volume={1.0}	 // Volume for player
+			resizeMode="cover"           // Fill the whole screen at aspect ratio.
+			repeat={true}                // Repeat forever.
+			ref={ref => {
+			  this.player = ref;
+			}} // Store reference
+   			*/ 
+	return (
       <View style={styles.container}>
-        <StatusBar hidden={true} />
+		  <Video
+			source={{uri: track.audioUrl, type: "m3u8"}} // Can be a URL or a local file.
+			ref="audioElement"
+			style={styles.audioElement}
+			paused={this.state.paused}
+			onLoadStart={this.loadStart} // Callback when video starts to load
+			onLoad={this.setDuration.bind(this)} // Callback when video loads
+			onProgress={this.setTime.bind(this)} // Callback every ~250ms with currentTime
+			onEnd={() => { AlertIOS.alert('Done!') }} 
+			resizeMode="cover"
+			rate={this.state.rate}
+			onBuffer={this.onBuffer} // Callback when remote video is buffering
+			onError={this.onError} // Callback when video cannot be loaded
+			fullscreen={false}
+		  />
+		<StatusBar hidden={true} />
         <Header message="Playing From Charts" />
         <AlbumArt url={track.albumArtUrl} />
         <TrackDetails title={track.title} artist={track.artist} />
@@ -116,21 +196,44 @@ export default class Player extends Component {
           shuffleOn={this.state.shuffleOn}
           forwardDisabled={this.state.selectedTrack === this.props.tracks.length - 1}
           onPressShuffle={() => this.setState({shuffleOn: !this.state.shuffleOn})}
-          onPressPlay={() => this.setState({paused: false})}
-          onPressPause={() => this.setState({paused: true})}
+          onPressPlay={this.onPlay} 
+          onPressPause={this.onPause}
           onBack={this.onBack.bind(this)}
           onForward={this.onForward.bind(this)}
           paused={this.state.paused}/>
-        {video}
-      </View>
+	 	<View>
+		  <TouchableOpacity> 
+			<View style={styles.chapterButton}> 
+			  <Image source={require('../img/2x/baseline_format_list_bulleted_black_36dp.png')} style={styles.buttons} />
+			  <Text style={styles.chapters}>Chapters</Text>	
+		    </View>
+		  </TouchableOpacity>
+		</View>
+	  </View>
     );
   }
 }
 
+   // tintColor: 'black',
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: 'rgb(4,4,4)',
+    backgroundColor: 'white', 
+  },
+  chapters: {
+    fontSize: 12,
+    color: 'rgb(64,64,64)',
+    textAlign: 'center',
+  },
+  buttons: {
+ 	width: 50,
+ 	height: 50,
+    tintColor: 'rgb(64,64,64)'
+  },
+  chapterButton: {
+    paddingTop: 40,	
+	alignItems: 'center',
+	justifyContent: 'center',
   },
   audioElement: {
     height: 0,

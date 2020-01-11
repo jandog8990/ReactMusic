@@ -50,8 +50,8 @@ const SeekBar = ({
         onSlidingComplete={onSeek}
         value={currentPosition}
         style={styles.slider}
-        minimumTrackTintColor='#fff'
-        maximumTrackTintColor='rgba(255, 255, 255, 0.14)'
+        minimumTrackTintColor='purple'
+        maximumTrackTintColor='rgba(192,192,192,0.8)'
         thumbStyle={styles.thumb}
         trackStyle={styles.track}/>
     </View>
@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: 'purple',
   },
   text: {
-    color: 'rgba(255, 255, 255, 0.72)',
+    color: 'purple', 
     fontSize: 12,
     textAlign:'center',
   }

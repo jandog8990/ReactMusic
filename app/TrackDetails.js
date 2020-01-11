@@ -27,7 +27,7 @@ const TrackDetails = ({
   <View style={styles.container}>
     <TouchableOpacity onPress={onAddPress}>
       <Image style={styles.button}
-        source={require('../img/ic_add_circle_outline_white.png')} />
+        source={require('../img/ic_add_circle_outline_white.png')} style={styles.buttons}/>
     </TouchableOpacity>
     <View style={styles.detailsWrapper}>
       <Text style={styles.title} onPress={onTitlePress}>{title}</Text>
@@ -36,7 +36,7 @@ const TrackDetails = ({
     <TouchableOpacity onPress={onMorePress}>
       <View style={styles.moreButton}>
         <Image style={styles.moreButtonIcon}
-          source={require('../img/ic_more_horiz_white.png')} />
+          source={require('../img/ic_more_horiz_white.png')} style={styles.buttons}/>
       </View>
     </TouchableOpacity>
   </View>
@@ -52,27 +52,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingRight: 20,
   },
+  buttons: {
+    tintColor: 'black' 
+  },
   detailsWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
   },
   artist: {
-    color: 'rgba(255, 255, 255, 0.72)',
-    fontSize: 12,
+    color: 'black', 
+    fontSize: 14,
     marginTop: 4,
   },
   button: {
     opacity: 0.72,
   },
   moreButton: {
-    borderColor: 'rgb(255, 255, 255)',
+    borderColor: 'black', 
     borderWidth: 2,
     opacity: 0.72,
     borderRadius: 10,

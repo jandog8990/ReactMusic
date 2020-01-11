@@ -31,16 +31,17 @@ const AlbumArt = ({
 
 export default AlbumArt;
 
-const { width, height } = Dimensions.get('window');
-const imageSize = width - 48;
+let { width, height } = Dimensions.get('window');
+width = width - 24;
+height = height - 420;
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 24,
-    paddingRight: 24,
+    paddingLeft: 12,
+    paddingRight: 12,
   },
   image: {
-    width: imageSize,
-    height: imageSize,
+    width: width,
+    height: height,
   },
 })

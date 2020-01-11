@@ -22,13 +22,13 @@ const Header = ({
   <View style={styles.container}>
     <TouchableOpacity onPress={onDownPress}>
       <Image style={styles.button}
-        source={require('../img/ic_keyboard_arrow_down_white.png')} />
+        source={require('../img/ic_keyboard_arrow_down_white.png')} style={styles.buttons}/>
     </TouchableOpacity>
     <Text onPress={onMessagePress}
       style={styles.message}>{message.toUpperCase()}</Text>
     <TouchableOpacity onPress={onQueuePress}>
       <Image style={styles.button}
-        source={require('../img/ic_queue_music_white.png')} />
+        source={require('../img/ic_queue_music_white.png')} style={styles.buttons}/>
     </TouchableOpacity>
   </View>
 );
@@ -42,6 +42,9 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12,
     flexDirection: 'row',
+  },
+  buttons: {
+    tintColor: 'purple'
   },
   message: {
     flex: 1,
