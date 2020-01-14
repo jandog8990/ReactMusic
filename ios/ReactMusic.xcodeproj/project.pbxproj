@@ -117,7 +117,6 @@
 				7FF1FCD7B7A0B3961D2E292A /* Pods-ReactMusicTests.debug.xcconfig */,
 				836AB31A78E167C32F138B12 /* Pods-ReactMusicTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -308,6 +307,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

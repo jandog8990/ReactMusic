@@ -164,11 +164,18 @@ export default class Player extends Component {
 			  this.player = ref;
 			}} // Store reference
    			*/ 
+	/*
+	 * Play the audio in the background requires:
+	 * 		playInBackground=true	
+	 *		ignoreSilentSwitch="ignore"	
+	 */
 	return (
       <View style={styles.container}>
 		  <Video
 			source={{uri: track.audioUrl, type: "m3u8"}} // Can be a URL or a local file.
 			ref="audioElement"
+			playInBackground={true}	
+			ignoreSilentSwitch="ignore"	
 			style={styles.audioElement}
 			paused={this.state.paused}
 			onLoadStart={this.loadStart} // Callback when video starts to load
